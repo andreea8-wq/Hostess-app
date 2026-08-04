@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#574135">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgcng9IjEwNCIgZmlsbD0iI0ZGRkRGOSIvPgogIDxwYXRoIGQ9Ik0yNTYsMTcwIEMyMzAsMTUwIDE4MCwxNDIgMTMwLDE1MCBMMTMwLDM2MiBDMTgwLDM1NCAyMzAsMzYyIDI1NiwzODIgWiIgZmlsbD0iIzZCNEEzNCIvPgogIDxwYXRoIGQ9Ik0yNTYsMTcwIEMyODIsMTUwIDMzMiwxNDIgMzgyLDE1MCBMMzgyLDM2MiBDMzMyLDM1NCAyODIsMzYyIDI1NiwzODIgWiIgZmlsbD0iIzhCNkE0QSIvPgogIDxsaW5lIHgxPSIxNjAiIHkxPSIyMDAiIHgyPSIyMzAiIHkyPSIxOTQiIHN0cm9rZT0iI0Y3RjFFNiIgc3Ryb2tlLXdpZHRoPSI4IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KICA8bGluZSB4MT0iMTYwIiB5MT0iMjMwIiB4Mj0iMjMwIiB5Mj0iMjI0IiBzdHJva2U9IiNGN0YxRTYiIHN0cm9rZS13aWR0aD0iOCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgPGxpbmUgeDE9IjE2MCIgeTE9IjI2MCIgeDI9IjIzMCIgeTI9IjI1NCIgc3Ryb2tlPSIjRjdGMUU2IiBzdHJva2Utd2lkdGg9IjgiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogIDxsaW5lIHgxPSIyODIiIHkxPSIxOTQiIHgyPSIzNTIiIHkyPSIyMDAiIHN0cm9rZT0iI0Y3RjFFNiIgc3Ryb2tlLXdpZHRoPSI4IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KICA8bGluZSB4MT0iMjgyIiB5MT0iMjI0IiB4Mj0iMzUyIiB5Mj0iMjMwIiBzdHJva2U9IiNGN0YxRTYiIHN0cm9rZS13aWR0aD0iOCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgPGxpbmUgeDE9IjI4MiIgeTE9IjI1NCIgeDI9IjM1MiIgeTI9IjI2MCIgc3Ryb2tlPSIjRjdGMUU2IiBzdHJva2Utd2lkdGg9IjgiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8L3N2Zz4K">
+<link rel="apple-touch-icon" href="data:image/png;base64,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">
+<title>Tables 🍽️</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#F7F1E6;
+    --cream-deep:#ECE1CC;
+    --rust:#574135;
+    --rust-deep:#3F2F25;
+    --rust-pale:#E7DCCE;
+    --olive:#7C8A5E;
+    --olive-deep:#5E6A45;
+    --olive-pale:#E7EBDD;
+    --sand:#D8C3A0;
+    --sand-deep:#A98B5E;
+    --sand-pale:#F0E6D3;
+    --ink:#4A3B2E;
+    --ink-soft:#8C7A66;
+    --white:#FFFDF9;
+    --shadow: 0 4px 16px rgba(120,90,60,0.14);
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color: transparent;}
+  html{ background:var(--cream); color-scheme: light; }
+  body{
+    margin:0; background:var(--cream); color:var(--ink);
+    font-family:'Inter',sans-serif;
+    padding-bottom:40px;
+    min-height:100vh;
+    color-scheme: light;
+  }
+  h1,h2,h3,.display{font-family:'Fredoka',sans-serif; font-weight:600;}
+  .wrap{max-width:480px; margin:0 auto; padding:0 16px;}
+
+  header.top{
+    background:linear-gradient(135deg, var(--rust) 0%, var(--rust-deep) 100%);
+    color:#fff; padding:22px 16px 30px; position:relative; overflow:hidden;
+  }
+  header.top .wrap{position:relative; z-index:2;}
+  header.top h1{margin:0; font-size:22px; letter-spacing:.2px;}
+  header.top .sub{font-size:13px; opacity:.92; margin-top:2px;}
+  .scallop{
+    position:absolute; left:0; right:0; bottom:-1px; height:18px;
+    background: radial-gradient(circle at 10px 0, transparent 10px, var(--cream) 10.5px) 0 -10px / 20px 20px repeat-x;
+  }
+
+  nav.tabs{display:flex; gap:8px; margin-top:16px;}
+  nav.tabs button{
+    flex:1; border:none; background:rgba(255,255,255,0.22); color:#fff;
+    font-family:'Fredoka',sans-serif; font-weight:600; font-size:14px;
+    padding:10px 0; border-radius:14px; cursor:pointer; transition:.15s;
+  }
+  nav.tabs button.active{background:#fff; color:var(--rust-deep);}
+
+  main{padding-top:16px;}
+  section.panel{display:none;}
+  section.panel.active{display:block;}
+
+  .card{
+    background:var(--white); border-radius:20px; padding:16px;
+    box-shadow:var(--shadow); margin-bottom:14px;
+  }
+  .card h2{font-size:15px; margin:0 0 10px; color:var(--rust-deep); display:flex; align-items:center;}
+  .card h2 .count-tag{
+    background:var(--olive-pale); color:var(--olive-deep); font-family:'Inter';
+    font-weight:600; font-size:12px; padding:2px 9px; border-radius:20px; margin-left:6px;
+  }
+
+  /* Servers */
+  .server-list{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px;}
+  .server-chip{
+    display:flex; align-items:center; gap:6px; background:var(--sand-pale);
+    border:1.5px solid var(--sand); border-radius:16px; padding:7px 10px 7px 12px; font-size:13.5px; font-weight:600;
+  }
+  .server-chip.bartender{background:var(--rust-pale); border-color:var(--rust);}
+  .server-chip .badge{font-size:11px; font-weight:700; background:var(--sand-deep); color:#fff; border-radius:10px; padding:1px 7px;}
+  .server-chip.bartender .badge{background:var(--rust-deep);}
+  .server-chip button{
+    border:none; background:none; cursor:pointer; font-size:14px; line-height:1; color:var(--ink-soft); padding:2px;
+  }
+  .server-chip button.bt-toggle{font-size:15px; opacity:.35; filter:grayscale(1);}
+  .server-chip.bartender button.bt-toggle{opacity:1; filter:none;}
+  .add-server-row{display:flex; gap:8px;}
+  .add-server-row input{
+    flex:1; border:1.5px solid var(--cream-deep); border-radius:14px; padding:10px 12px;
+    font-family:'Inter'; font-size:14px; background:var(--white); color:var(--ink); color-scheme: light;
+  }
+  .add-server-row input:focus{outline:none; border-color:var(--rust);}
+  .btn{
+    border:none; border-radius:14px; padding:10px 16px; font-family:'Fredoka'; font-weight:600;
+    font-size:14px; cursor:pointer; transition:.15s;
+  }
+  .btn-rust{background:var(--rust); color:#fff;}
+  .btn-rust:active{background:var(--rust-deep);}
+  .btn-outline{background:none; border:1.5px solid var(--rust); color:var(--rust-deep);}
+  .hint{font-size:12px; color:var(--ink-soft); margin-top:8px; line-height:1.4;}
+
+  /* Reservations */
+  .res-row{
+    display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--cream-deep);
+  }
+  .res-row:last-child{border-bottom:none;}
+  .res-main{flex:1; min-width:0;}
+  .res-main .party{font-family:'Fredoka'; font-weight:600; font-size:14px;}
+  .res-main .assigned{font-size:12px; color:var(--ink-soft);}
+  .res-main .note{font-size:12px; color:var(--ink-soft); font-style:italic;}
+  .res-actions{display:flex; gap:6px; flex-shrink:0;}
+  .btn-seated{background:var(--olive); color:#fff; border:none; border-radius:12px; padding:7px 12px; font-family:'Fredoka'; font-weight:600; font-size:12.5px; cursor:pointer;}
+  .del-res{border:none; background:none; color:var(--ink-soft); font-size:16px; cursor:pointer; padding:2px 4px;}
+  .res-form-row{display:flex; align-items:center; gap:10px; margin-bottom:10px;}
+  .mini-stepper{display:flex; align-items:center; gap:8px;}
+  .mini-stepper button{
+    width:28px; height:28px; border-radius:50%; border:none; background:var(--sand-pale);
+    color:var(--sand-deep); font-size:15px; font-weight:700; cursor:pointer;
+  }
+  .mini-stepper .num{font-family:'Fredoka'; font-size:15px; min-width:22px; text-align:center;}
+  select.server-select{
+    flex:1; border:1.5px solid var(--cream-deep); border-radius:12px; padding:8px 10px;
+    font-family:'Inter'; font-size:13.5px; background:var(--white); color:var(--ink);
+    color-scheme: light; -webkit-appearance:none; appearance:none;
+  }
+  .add-res-row{display:flex; gap:8px;}
+  .add-res-row input{
+    flex:1; border:1.5px solid var(--cream-deep); border-radius:14px; padding:10px 12px;
+    font-family:'Inter'; font-size:13.5px; background:var(--white); color:var(--ink); color-scheme: light;
+  }
+
+  /* Suggestion */
+  .suggest-box{
+    background:var(--olive-pale); border-radius:16px; padding:12px 14px; display:flex;
+    align-items:center; justify-content:space-between; gap:10px; margin-bottom:12px;
+  }
+  .suggest-box span:first-child{color:var(--olive-deep); font-weight:600; font-size:13.5px;}
+  .suggest-box .who{font-family:'Fredoka'; font-weight:700; color:var(--olive-deep); font-size:16px;}
+  .suggest-box.bartender-turn{background:var(--rust-pale);}
+  .suggest-box.bartender-turn span:first-child{color:var(--rust-deep);}
+  .suggest-box.bartender-turn .who{color:var(--rust-deep);}
+  .suggest-note{font-size:12px; color:var(--rust-deep); background:var(--rust-pale); border-radius:10px; padding:8px 10px; margin:-2px 0 12px;}
+
+  /* Add table form */
+  .stepper{display:flex; align-items:center; gap:14px; justify-content:center; margin-bottom:14px;}
+  .stepper button{
+    width:38px; height:38px; border-radius:50%; border:none; background:var(--sand-pale);
+    color:var(--sand-deep); font-size:20px; font-weight:700; cursor:pointer;
+  }
+  .stepper .num{font-family:'Fredoka'; font-size:26px; min-width:46px; text-align:center;}
+  .server-pick-row{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px;}
+  .server-pick{
+    padding:7px 13px; border-radius:14px; border:1.5px solid var(--sand); background:var(--sand-pale);
+    color:var(--ink); font-size:13px; font-weight:600; cursor:pointer;
+  }
+  .server-pick.selected{background:var(--rust); border-color:var(--rust); color:#fff;}
+  .server-pick.selected.bartender{background:var(--rust-deep); border-color:var(--rust-deep);}
+
+  /* Table rows (shared by live + history) */
+  .table-row{
+    display:flex; align-items:center; gap:10px; padding:11px 0; border-bottom:1px solid var(--cream-deep);
+  }
+  .table-row:last-child{border-bottom:none;}
+  .table-server-tag{
+    font-size:11px; font-weight:700; padding:3px 9px; border-radius:12px; background:var(--sand-pale); color:var(--sand-deep);
+    white-space:nowrap;
+  }
+  .table-server-tag.bartender{background:var(--rust-pale); color:var(--rust-deep);}
+  .source-tag{
+    font-size:10.5px; font-weight:600; padding:3px 8px; border-radius:12px; white-space:nowrap;
+    background:var(--sand-pale); color:var(--sand-deep);
+  }
+  .source-tag.reservation{background:var(--olive-pale); color:var(--olive-deep);}
+  .table-time{font-size:12px; color:var(--ink-soft); min-width:44px;}
+  .table-people{display:flex; align-items:center; gap:6px; margin-left:auto;}
+  .table-people button{
+    width:24px; height:24px; border-radius:50%; border:none; background:var(--cream-deep); font-size:14px; cursor:pointer;
+  }
+  .table-people .n{font-family:'Fredoka'; font-weight:600; font-size:15px; min-width:20px; text-align:center;}
+  .table-people .n.readonly{margin-left:auto;}
+  .del-table{border:none; background:none; color:var(--ink-soft); font-size:16px; cursor:pointer; padding:2px 4px;}
+  .empty-msg{color:var(--ink-soft); font-size:13.5px; text-align:center; padding:16px 0;}
+
+  /* Summary rows (shared by live + history) */
+  .summary-row{display:flex; align-items:center; padding:8px 0; border-bottom:1px solid var(--cream-deep); font-size:14px;}
+  .summary-row:last-child{border-bottom:none;}
+  .summary-row .name{font-weight:600; flex:1;}
+  .summary-row .stat{font-size:12.5px; color:var(--ink-soft); margin-left:10px;}
+  .summary-row .stat b{color:var(--ink); font-family:'Fredoka';}
+
+  /* Floating add button */
+  .fab{
+    position:fixed; bottom:22px; left:50%; transform:translateX(-50%); z-index:20;
+    background:var(--rust); color:#fff; border:none; border-radius:30px; padding:14px 26px;
+    font-family:'Fredoka'; font-weight:600; font-size:15px; box-shadow:0 6px 18px rgba(150,72,44,0.35);
+    display:flex; align-items:center; gap:8px; cursor:pointer;
+  }
+  .reset-btn{width:100%; margin-top:4px; background:var(--cream); border:1.5px solid var(--rust); color:var(--rust-deep);}
+
+  /* Modal / overlay */
+  .overlay{
+    position:fixed; inset:0; background:rgba(74,59,46,0.4); z-index:50; display:none;
+    align-items:flex-end; justify-content:center;
+  }
+  .overlay.show{display:flex;}
+  .sheet{
+    background:var(--white); width:100%; max-width:480px; border-radius:24px 24px 0 0;
+    padding:20px 18px 26px; animation:slideUp .2s ease-out;
+  }
+  @keyframes slideUp{from{transform:translateY(30px); opacity:0;} to{transform:translateY(0); opacity:1;}}
+  .sheet h3{margin:0 0 14px; font-size:17px; color:var(--rust-deep); text-align:center;}
+  .sheet-actions{display:flex; gap:10px; margin-top:6px;}
+  .sheet-actions .btn{flex:1;}
+
+  .confirm-box{
+    background:var(--white); border-radius:20px; padding:20px; max-width:340px; margin:0 auto;
+    text-align:center; box-shadow:var(--shadow);
+  }
+  .confirm-box p{font-size:14px; line-height:1.5; margin:0 0 16px;}
+  .overlay.center{align-items:center;}
+
+  /* Calendar */
+  .cal-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;}
+  .cal-head button{border:none; background:var(--rust-pale); color:var(--rust-deep); width:30px; height:30px; border-radius:50%; font-size:16px; cursor:pointer;}
+  .cal-head .label{font-family:'Fredoka'; font-weight:600; font-size:15px;}
+  .cal-grid{display:grid; grid-template-columns:repeat(7,1fr); gap:4px; text-align:center;}
+  .cal-grid .dow{font-size:11px; color:var(--ink-soft); font-weight:600; padding-bottom:4px;}
+  .cal-day{
+    position:relative; padding:8px 0; border-radius:12px; font-size:13px; cursor:pointer; color:var(--ink);
+  }
+  .cal-day.empty{cursor:default;}
+  .cal-day.has-data{background:var(--olive-pale); font-weight:600; color:var(--olive-deep);}
+  .cal-day.selected{background:var(--rust); color:#fff !important;}
+  .cal-day .dot{position:absolute; bottom:2px; left:50%; transform:translateX(-50%); width:4px; height:4px; border-radius:50%; background:var(--olive-deep);}
+  .cal-day.selected .dot{background:#fff;}
+  .hist-shift{background:var(--cream); border-radius:14px; padding:12px; margin-top:10px;}
+  .hist-shift .times{font-size:11.5px; color:var(--ink-soft); margin-bottom:8px;}
+  .hist-shift h3.sub-h{font-size:13px; color:var(--rust-deep); margin:10px 0 4px;}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <h1>Tables 🍽️</h1>
+    <div class="sub" id="todayLabel">–</div>
+    <nav class="tabs">
+      <button id="tabBtnShift" class="active">Shift</button>
+      <button id="tabBtnHistory">History</button>
+    </nav>
+  </div>
+  <div class="scallop"></div>
+</header>
+
+<main class="wrap">
+
+  <section class="panel active" id="panelShift">
+
+    <div class="card">
+      <h2>Servers on shift</h2>
+      <div class="server-list" id="serverList"></div>
+      <div class="add-server-row">
+        <input type="text" id="newServerName" placeholder="Server name" maxlength="20">
+        <button class="btn btn-rust" id="addServerBtn">+ Add</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Reservations</h2>
+      <div id="resList"></div>
+      <div class="empty-msg" id="resEmptyMsg" style="display:none;">No reservations yet.</div>
+      <div class="res-form-row">
+        <div class="mini-stepper">
+          <button id="resMinus">–</button>
+          <div class="num" id="resNum">2</div>
+          <button id="resPlus">+</button>
+        </div>
+        <select class="server-select" id="resServerSelect"></select>
+      </div>
+      <div class="add-res-row">
+        <input type="text" id="resNote" placeholder="Note (optional, e.g. 7:30pm)" maxlength="30">
+        <button class="btn btn-rust" id="addResBtn">+ Add</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>This shift</h2>
+      <div id="summaryList"></div>
+    </div>
+
+    <div class="card">
+      <h2>Walk-in</h2>
+      <div class="res-form-row">
+        <div class="mini-stepper">
+          <button id="wiMinus">–</button>
+          <div class="num" id="wiNum">2</div>
+          <button id="wiPlus">+</button>
+        </div>
+        <span style="font-size:12.5px; color:var(--ink-soft);">guests</span>
+      </div>
+      <div id="wiSuggestBox"></div>
+      <div id="wiSuggestNote"></div>
+      <div class="server-pick-row" id="wiPickRow"></div>
+      <button class="btn btn-rust" id="seatWalkInBtn" style="width:100%;">Seat walk-in</button>
+    </div>
+
+    <div class="card">
+      <h2>Active tables <span class="count-tag" id="activeCountTag">0</span></h2>
+      <div id="tablesList"></div>
+      <div class="empty-msg" id="tablesEmptyMsg" style="display:none;">No active tables right now.</div>
+      <button class="btn reset-btn" id="resetShiftBtn">↺ Reset shift</button>
+    </div>
+
+  </section>
+
+  <section class="panel" id="panelHistory">
+    <div class="card">
+      <div class="cal-head">
+        <button id="calPrev">‹</button>
+        <div class="label" id="calLabel">–</div>
+        <button id="calNext">›</button>
+      </div>
+      <div class="cal-grid" id="calGrid"></div>
+    </div>
+    <div class="card" id="histDetailCard" style="display:none;">
+      <h2 id="histDetailTitle">–</h2>
+      <div id="histDetailBody"></div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Reset confirm -->
+<div class="overlay center" id="resetOverlay">
+  <div class="confirm-box">
+    <p>Reset the shift? Current data will be saved to history. The server list, active tables and any open reservations will be cleared.</p>
+    <div class="sheet-actions">
+      <button class="btn btn-outline" id="cancelReset">Cancel</button>
+      <button class="btn btn-rust" id="confirmReset">Reset</button>
+    </div>
+  </div>
+</div>
+
+<!-- Remove server confirm -->
+<div class="overlay center" id="removeServerOverlay">
+  <div class="confirm-box">
+    <p id="removeServerMsg">–</p>
+    <div class="sheet-actions">
+      <button class="btn btn-outline" id="cancelRemoveServer">Cancel</button>
+      <button class="btn btn-rust" id="confirmRemoveServer">Remove</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY = 'kaneoTablesTracker_v2';
+const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const DOW_SHORT = ['S','M','T','W','T','F','S'];
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+const SERVER_COLORS = [
+  { dark:'#8B3A3A', pale:'#F1DEDD' }, // red
+  { dark:'#3A5A78', pale:'#DEE6EC' }, // blue
+  { dark:'#6B4A34', pale:'#E9DECF' }, // brown
+  { dark:'#4C6B3A', pale:'#E1E9D8' }  // green
+];
+function colorForServer(serverId, serversList){
+  const idx = serversList.findIndex(s=>s.id===serverId);
+  return SERVER_COLORS[idx>=0 ? idx % SERVER_COLORS.length : 0];
+}
+
+function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+function dateKey(d){ const p=n=>String(n).padStart(2,'0'); return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`; }
+function timeLabel(ts){ const d=new Date(ts); return d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}); }
+
+function emptyCurrent(){ return { startedAt: Date.now(), servers: [], tables: [], reservations: [] }; }
+
+function load(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return { current: emptyCurrent(), history: {} };
+    const parsed = JSON.parse(raw);
+    if(!parsed.current) parsed.current = emptyCurrent();
+    if(!parsed.current.reservations) parsed.current.reservations = [];
+    if(!parsed.history) parsed.history = {};
+    return parsed;
+  }catch(e){ return { current: emptyCurrent(), history: {} }; }
+}
+function save(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+
+let state = load();
+let pendingPeople = 2;
+let pendingServerId = null;
+let pendingResPeople = 2;
+let calMonth = new Date();
+let selectedHistDate = null;
+
+// ---------- helpers ----------
+function countForServer(id, tables){ return (tables||state.current.tables).filter(t=>t.serverId===id).length; }
+function peopleForServer(id, tables){ return (tables||state.current.tables).filter(t=>t.serverId===id).reduce((s,t)=>s+t.people,0); }
+
+function suggestServer(){
+  const servers = state.current.servers;
+  if(servers.length===0) return null;
+  let min = Infinity, best = null;
+  servers.forEach(s=>{
+    const c = countForServer(s.id);
+    if(c < min){ min = c; best = s; }
+  });
+  return best;
+}
+
+// ---------- rendering ----------
+function renderTodayLabel(){
+  const d = new Date();
+  document.getElementById('todayLabel').textContent =
+    `${DAYS[d.getDay()]}, ${MONTHS[d.getMonth()]} ${d.getDate()}`;
+}
+
+function renderServers(){
+  const list = document.getElementById('serverList');
+  list.innerHTML = '';
+  state.current.servers.forEach(s=>{
+    const chip = document.createElement('div');
+    chip.className = 'server-chip' + (s.isBartender ? ' bartender' : '');
+    const c = colorForServer(s.id, state.current.servers);
+    chip.style.background = c.pale;
+    chip.style.borderColor = c.dark;
+    const cnt = countForServer(s.id);
+    chip.innerHTML = `
+      <button class="bt-toggle" data-id="${s.id}" title="Mark bartender">🍸</button>
+      <span style="color:${c.dark};">${s.name}</span>
+      <span class="badge" style="background:${c.dark};">${cnt}</span>
+      <button class="rm-server" data-id="${s.id}" title="Remove">✕</button>
+    `;
+    list.appendChild(chip);
+  });
+  list.querySelectorAll('.bt-toggle').forEach(btn=>{
+    btn.onclick = ()=>{
+      const s = state.current.servers.find(x=>x.id===btn.dataset.id);
+      s.isBartender = !s.isBartender;
+      save(); renderAll();
+    };
+  });
+  list.querySelectorAll('.rm-server').forEach(btn=>{
+    btn.onclick = ()=> openRemoveServer(btn.dataset.id);
+  });
+  renderResServerSelect();
+}
+
+let removeServerTargetId = null;
+function openRemoveServer(id){
+  const s = state.current.servers.find(x=>x.id===id);
+  const active = countForServer(id);
+  removeServerTargetId = id;
+  document.getElementById('removeServerMsg').textContent = active>0
+    ? `${s.name} has ${active} active table${active===1?'':'s'}. Remove this server and their tables?`
+    : `Remove ${s.name} from the shift?`;
+  document.getElementById('removeServerOverlay').classList.add('show');
+}
+
+function renderTableRows(container, tables, servers, opts){
+  opts = opts || {};
+  container.innerHTML = '';
+  const sorted = [...tables].sort((a,b)=>a.enteredAt-b.enteredAt);
+  if(sorted.length===0){
+    if(opts.emptyMsg){
+      const em = document.createElement('div');
+      em.className = 'empty-msg';
+      em.textContent = opts.emptyMsg;
+      container.appendChild(em);
+    }
+    return;
+  }
+  sorted.forEach(t=>{
+    const server = servers.find(s=>s.id===t.serverId);
+    const c = server ? colorForServer(server.id, servers) : {dark:'#8C7A66', pale:'#EDE6DA'};
+    const row = document.createElement('div');
+    row.className = 'table-row';
+    row.innerHTML = `
+      <span class="table-server-tag" style="background:${c.pale}; color:${c.dark};">${server ? server.name : '—'}</span>
+      <span class="source-tag ${t.source==='reservation' ? 'reservation' : ''}">${t.source==='reservation' ? 'Reservation' : 'Walk-in'}</span>
+      <span class="table-time">${timeLabel(t.enteredAt)}</span>
+      ${opts.editable ? `
+        <div class="table-people">
+          <button class="pp-minus" data-id="${t.id}">–</button>
+          <span class="n">${t.people}</span>
+          <button class="pp-plus" data-id="${t.id}">+</button>
+        </div>
+        <button class="del-table" data-id="${t.id}" title="Table left">🗑️</button>
+      ` : `
+        <span class="n readonly">${t.people}p</span>
+      `}
+    `;
+    container.appendChild(row);
+  });
+  if(opts.editable){
+    container.querySelectorAll('.pp-minus').forEach(b=> b.onclick=()=>changePeople(b.dataset.id,-1));
+    container.querySelectorAll('.pp-plus').forEach(b=> b.onclick=()=>changePeople(b.dataset.id,1));
+    container.querySelectorAll('.del-table').forEach(b=> b.onclick=()=>{
+      state.current.tables = state.current.tables.filter(t=>t.id!==b.dataset.id);
+      save(); renderAll();
+    });
+  }
+}
+
+function renderTables(){
+  const wrap = document.getElementById('tablesList');
+  document.getElementById('activeCountTag').textContent = state.current.tables.length;
+  renderTableRows(wrap, state.current.tables, state.current.servers, {editable:true, emptyMsg:null});
+  document.getElementById('tablesEmptyMsg').style.display = state.current.tables.length===0 ? 'block' : 'none';
+}
+
+function changePeople(id, delta){
+  const t = state.current.tables.find(x=>x.id===id);
+  if(!t) return;
+  t.people = Math.max(1, t.people + delta);
+  save(); renderAll();
+}
+
+function renderSummaryRows(container, servers, tables){
+  container.innerHTML = '';
+  if(servers.length===0){
+    container.innerHTML = '<div class="empty-msg">Add servers to see stats.</div>';
+    return;
+  }
+  servers.forEach(s=>{
+    const c = colorForServer(s.id, servers);
+    const row = document.createElement('div');
+    row.className = 'summary-row';
+    row.innerHTML = `
+      <span class="name" style="color:${c.dark};">${s.isBartender?'🍸 ':''}${s.name}</span>
+      <span class="stat"><b>${countForServer(s.id, tables)}</b> tables</span>
+      <span class="stat"><b>${peopleForServer(s.id, tables)}</b> guests</span>
+    `;
+    container.appendChild(row);
+  });
+}
+
+function renderSummary(){
+  renderSummaryRows(document.getElementById('summaryList'), state.current.servers, state.current.tables);
+}
+
+// ---------- reservations ----------
+function renderResServerSelect(){
+  const sel = document.getElementById('resServerSelect');
+  const prev = sel.value;
+  sel.innerHTML = '';
+  if(state.current.servers.length===0){
+    sel.innerHTML = '<option value="">Add servers first</option>';
+    return;
+  }
+  state.current.servers.forEach(s=>{
+    const opt = document.createElement('option');
+    opt.value = s.id;
+    opt.textContent = (s.isBartender?'🍸 ':'') + s.name;
+    sel.appendChild(opt);
+  });
+  if(prev && state.current.servers.some(s=>s.id===prev)) sel.value = prev;
+}
+
+function renderReservations(){
+  const wrap = document.getElementById('resList');
+  const empty = document.getElementById('resEmptyMsg');
+  wrap.innerHTML = '';
+  const list = state.current.reservations;
+  if(list.length===0){ empty.style.display='block'; return; }
+  empty.style.display='none';
+  list.forEach(r=>{
+    const server = state.current.servers.find(s=>s.id===r.serverId);
+    const c = server ? colorForServer(server.id, state.current.servers) : {dark:'#8C7A66'};
+    const row = document.createElement('div');
+    row.className = 'res-row';
+    row.innerHTML = `
+      <div class="res-main">
+        <div class="party">Party of ${r.people}</div>
+        <div class="assigned">→ <span style="color:${c.dark}; font-weight:600;">${server ? (server.isBartender?'🍸 ':'')+server.name : 'unassigned'}</span></div>
+        ${r.note ? `<div class="note">${r.note}</div>` : ''}
+      </div>
+      <div class="res-actions">
+        <button class="btn-seated" data-id="${r.id}">Seated</button>
+        <button class="del-res" data-id="${r.id}">✕</button>
+      </div>
+    `;
+    wrap.appendChild(row);
+  });
+  wrap.querySelectorAll('.btn-seated').forEach(b=> b.onclick=()=>seatReservation(b.dataset.id));
+  wrap.querySelectorAll('.del-res').forEach(b=> b.onclick=()=>{
+    state.current.reservations = state.current.reservations.filter(r=>r.id!==b.dataset.id);
+    save(); renderAll();
+  });
+}
+
+function seatReservation(id){
+  const r = state.current.reservations.find(x=>x.id===id);
+  if(!r) return;
+  state.current.tables.push({ id: uid(), serverId: r.serverId, people: r.people, enteredAt: Date.now(), source: 'reservation' });
+  state.current.reservations = state.current.reservations.filter(x=>x.id!==id);
+  save(); renderAll();
+}
+
+document.getElementById('resMinus').onclick = ()=>{ pendingResPeople = Math.max(1,pendingResPeople-1); document.getElementById('resNum').textContent = pendingResPeople; };
+document.getElementById('resPlus').onclick = ()=>{ pendingResPeople = Math.min(30,pendingResPeople+1); document.getElementById('resNum').textContent = pendingResPeople; };
+document.getElementById('addResBtn').onclick = ()=>{
+  const sel = document.getElementById('resServerSelect');
+  if(!sel.value) return;
+  const noteEl = document.getElementById('resNote');
+  state.current.reservations.push({
+    id: uid(), people: pendingResPeople, serverId: sel.value, note: noteEl.value.trim()
+  });
+  noteEl.value='';
+  pendingResPeople = 2;
+  document.getElementById('resNum').textContent = 2;
+  save(); renderAll();
+};
+
+function renderAll(){
+  renderServers();
+  renderReservations();
+  renderSummary();
+  renderTables();
+  renderWalkIn();
+}
+
+// ---------- walk-in ----------
+function renderWalkIn(){
+  document.getElementById('wiNum').textContent = pendingPeople;
+  const suggestion = suggestServer();
+  const boxWrap = document.getElementById('wiSuggestBox');
+  const noteWrap = document.getElementById('wiSuggestNote');
+  if(!suggestion){
+    boxWrap.innerHTML = '<div class="empty-msg">Add servers to get a suggestion.</div>';
+    noteWrap.innerHTML = '';
+    document.getElementById('wiPickRow').innerHTML = '';
+    return;
+  }
+  if(!pendingServerId || !state.current.servers.some(s=>s.id===pendingServerId)){
+    pendingServerId = suggestion.id;
+  }
+  const sc = colorForServer(suggestion.id, state.current.servers);
+  boxWrap.innerHTML = `
+    <div class="suggest-box" style="background:${sc.pale};">
+      <span style="color:${sc.dark};">${suggestion.isBartender?'🍸':'👉'} Give this table to</span>
+      <span class="who" style="color:${sc.dark};">${suggestion.name}</span>
+    </div>`;
+  noteWrap.innerHTML = suggestion.isBartender
+    ? `<div class="suggest-note">It's the bartender's turn — check if they can take it. If not, pick someone else below.</div>`
+    : '';
+  const pickRow = document.getElementById('wiPickRow');
+  pickRow.innerHTML = '';
+  state.current.servers.forEach(s=>{
+    const c = colorForServer(s.id, state.current.servers);
+    const selected = s.id===pendingServerId;
+    const btn = document.createElement('button');
+    btn.className = 'server-pick';
+    btn.style.background = selected ? c.dark : c.pale;
+    btn.style.borderColor = c.dark;
+    btn.style.color = selected ? '#fff' : c.dark;
+    btn.textContent = (s.isBartender?'🍸 ':'') + s.name + ` (${countForServer(s.id)})`;
+    btn.onclick = ()=>{ pendingServerId = s.id; renderWalkIn(); };
+    pickRow.appendChild(btn);
+  });
+}
+
+document.getElementById('wiMinus').onclick = ()=>{ pendingPeople = Math.max(1,pendingPeople-1); renderWalkIn(); };
+document.getElementById('wiPlus').onclick = ()=>{ pendingPeople = Math.min(30,pendingPeople+1); renderWalkIn(); };
+document.getElementById('seatWalkInBtn').onclick = ()=>{
+  if(state.current.servers.length===0){
+    alert('Add servers to the shift first.');
+    return;
+  }
+  if(!pendingServerId) return;
+  state.current.tables.push({ id: uid(), serverId: pendingServerId, people: pendingPeople, enteredAt: Date.now(), source: 'walk-in' });
+  pendingPeople = 2;
+  pendingServerId = null;
+  save(); renderAll();
+};
+
+// ---------- add / remove server ----------
+document.getElementById('addServerBtn').onclick = ()=>{
+  const input = document.getElementById('newServerName');
+  const name = input.value.trim();
+  if(!name) return;
+  state.current.servers.push({ id: uid(), name, isBartender:false });
+  input.value='';
+  save(); renderAll();
+};
+document.getElementById('newServerName').addEventListener('keydown', e=>{
+  if(e.key==='Enter') document.getElementById('addServerBtn').click();
+});
+
+document.getElementById('cancelRemoveServer').onclick = ()=>{
+  document.getElementById('removeServerOverlay').classList.remove('show');
+  removeServerTargetId = null;
+};
+document.getElementById('confirmRemoveServer').onclick = ()=>{
+  state.current.tables = state.current.tables.filter(t=>t.serverId!==removeServerTargetId);
+  state.current.reservations = state.current.reservations.filter(r=>r.serverId!==removeServerTargetId);
+  state.current.servers = state.current.servers.filter(s=>s.id!==removeServerTargetId);
+  save(); renderAll();
+  document.getElementById('removeServerOverlay').classList.remove('show');
+  removeServerTargetId = null;
+};
+
+// ---------- reset shift ----------
+document.getElementById('resetShiftBtn').onclick = ()=> document.getElementById('resetOverlay').classList.add('show');
+document.getElementById('cancelReset').onclick = ()=> document.getElementById('resetOverlay').classList.remove('show');
+document.getElementById('confirmReset').onclick = ()=>{
+  const key = dateKey(new Date());
+  if(!state.history[key]) state.history[key] = [];
+  if(state.current.servers.length>0 || state.current.tables.length>0){
+    state.history[key].push({
+      startedAt: state.current.startedAt,
+      endedAt: Date.now(),
+      servers: state.current.servers,
+      tables: state.current.tables
+    });
+  }
+  state.current = emptyCurrent();
+  save();
+  document.getElementById('resetOverlay').classList.remove('show');
+  renderAll();
+  renderCalendar();
+};
+
+// ---------- tabs ----------
+const tabBtnShift = document.getElementById('tabBtnShift');
+const tabBtnHistory = document.getElementById('tabBtnHistory');
+tabBtnShift.onclick = ()=> switchTab('shift');
+tabBtnHistory.onclick = ()=> switchTab('history');
+function switchTab(tab){
+  document.getElementById('panelShift').classList.toggle('active', tab==='shift');
+  document.getElementById('panelHistory').classList.toggle('active', tab==='history');
+  tabBtnShift.classList.toggle('active', tab==='shift');
+  tabBtnHistory.classList.toggle('active', tab==='history');
+  if(tab==='history') renderCalendar();
+}
+
+// ---------- calendar / history ----------
+document.getElementById('calPrev').onclick = ()=>{ calMonth.setMonth(calMonth.getMonth()-1); renderCalendar(); };
+document.getElementById('calNext').onclick = ()=>{ calMonth.setMonth(calMonth.getMonth()+1); renderCalendar(); };
+
+function renderCalendar(){
+  document.getElementById('calLabel').textContent = `${MONTHS[calMonth.getMonth()]} ${calMonth.getFullYear()}`;
+  const grid = document.getElementById('calGrid');
+  grid.innerHTML = '';
+  DOW_SHORT.forEach(d=>{
+    const el = document.createElement('div');
+    el.className='dow'; el.textContent=d;
+    grid.appendChild(el);
+  });
+  const firstOfMonth = new Date(calMonth.getFullYear(), calMonth.getMonth(), 1);
+  const startOffset = firstOfMonth.getDay();
+  const daysInMonth = new Date(calMonth.getFullYear(), calMonth.getMonth()+1, 0).getDate();
+
+  for(let i=0;i<startOffset;i++){
+    const el = document.createElement('div');
+    el.className='cal-day empty';
+    grid.appendChild(el);
+  }
+  for(let day=1; day<=daysInMonth; day++){
+    const d = new Date(calMonth.getFullYear(), calMonth.getMonth(), day);
+    const key = dateKey(d);
+    const hasData = !!state.history[key];
+    const el = document.createElement('div');
+    el.className = 'cal-day' + (hasData?' has-data':'') + (key===selectedHistDate?' selected':'');
+    el.innerHTML = `${day}${hasData?'<span class="dot"></span>':''}`;
+    el.onclick = ()=>{
+      selectedHistDate = key;
+      renderCalendar();
+      renderHistoryDetail(key);
+    };
+    grid.appendChild(el);
+  }
+}
+
+function renderHistoryDetail(key){
+  const card = document.getElementById('histDetailCard');
+  const shifts = state.history[key];
+  if(!shifts || shifts.length===0){
+    card.style.display='none';
+    return;
+  }
+  card.style.display='block';
+  const d = new Date(key+'T00:00:00');
+  document.getElementById('histDetailTitle').textContent = `${DAYS[d.getDay()]}, ${MONTHS[d.getMonth()]} ${d.getDate()}`;
+  const body = document.getElementById('histDetailBody');
+  body.innerHTML = '';
+  shifts.forEach(shift=>{
+    const box = document.createElement('div');
+    box.className = 'hist-shift';
+    const start = timeLabel(shift.startedAt);
+    const end = timeLabel(shift.endedAt);
+    box.innerHTML = `<div class="times">${start} – ${end}</div><h3 class="sub-h">This shift</h3><div class="hs-summary"></div><h3 class="sub-h">Tables</h3><div class="hs-tables"></div>`;
+    body.appendChild(box);
+    renderSummaryRows(box.querySelector('.hs-summary'), shift.servers, shift.tables);
+    renderTableRows(box.querySelector('.hs-tables'), shift.tables, shift.servers, {editable:false, emptyMsg:'No tables recorded.'});
+  });
+}
+
+// ---------- init ----------
+renderTodayLabel();
+renderAll();
+renderCalendar();
+</script>
+</body>
+</html>
