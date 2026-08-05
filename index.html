@@ -111,7 +111,13 @@
   }
   .res-row:last-child{border-bottom:none;}
   .res-main{flex:1; min-width:0;}
-  .res-main .party{font-family:'Fredoka'; font-weight:600; font-size:14px;}
+  .res-main .party-edit{display:flex; align-items:center; gap:6px; margin-bottom:2px;}
+  .res-main .party-edit button{
+    width:22px; height:22px; border-radius:50%; border:none; background:var(--sand-pale);
+    color:var(--sand-deep); font-size:13px; font-weight:700; cursor:pointer;
+  }
+  .res-main .party-edit .party{font-family:'Fredoka'; font-weight:600; font-size:14px; min-width:14px; text-align:center;}
+  .res-main .party-edit .party-label{font-size:12px; color:var(--ink-soft);}
   .res-main .assigned{font-size:12px; color:var(--ink-soft);}
   .res-main .note{font-size:12px; color:var(--ink-soft); font-style:italic;}
   .res-actions{display:flex; gap:6px; flex-shrink:0;}
@@ -579,7 +585,12 @@ function renderReservations(){
     row.className = 'res-row';
     row.innerHTML = `
       <div class="res-main">
-        <div class="party">Party of ${r.people}</div>
+        <div class="party-edit">
+          <button class="res-pp-minus" data-id="${r.id}">–</button>
+          <span class="party">${r.people}</span>
+          <button class="res-pp-plus" data-id="${r.id}">+</button>
+          <span class="party-label">guests</span>
+        </div>
         <div class="assigned">→ <span style="color:${c.dark}; font-weight:600;">${server ? (server.isBartender?'🍸 ':'')+server.name : 'unassigned'}</span></div>
         ${r.note ? `<div class="note">${r.note}</div>` : ''}
       </div>
@@ -590,11 +601,20 @@ function renderReservations(){
     `;
     wrap.appendChild(row);
   });
+  wrap.querySelectorAll('.res-pp-minus').forEach(b=> b.onclick=()=>changeResPeople(b.dataset.id,-1));
+  wrap.querySelectorAll('.res-pp-plus').forEach(b=> b.onclick=()=>changeResPeople(b.dataset.id,1));
   wrap.querySelectorAll('.btn-seated').forEach(b=> b.onclick=()=>seatReservation(b.dataset.id));
   wrap.querySelectorAll('.del-res').forEach(b=> b.onclick=()=>{
     state.current.reservations = state.current.reservations.filter(r=>r.id!==b.dataset.id);
     save(); renderAll();
   });
+}
+
+function changeResPeople(id, delta){
+  const r = state.current.reservations.find(x=>x.id===id);
+  if(!r) return;
+  r.people = Math.max(1, r.people + delta);
+  save(); renderAll();
 }
 
 function seatReservation(id){
