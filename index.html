@@ -287,8 +287,11 @@
           <div class="num" id="resNum">2</div>
           <button id="resPlus">+</button>
         </div>
-        <select class="server-select" id="resServerSelect"></select>
+        <span style="font-size:12.5px; color:var(--ink-soft);">guests</span>
       </div>
+      <div id="resSuggestBox"></div>
+      <div id="resSuggestNote"></div>
+      <div class="server-pick-row" id="resPickRow"></div>
       <div class="add-res-row">
         <input type="text" id="resNote" placeholder="Note (optional, e.g. 7:30pm)" maxlength="30">
         <button class="btn btn-rust" id="addResBtn">+ Add</button>
@@ -364,6 +367,15 @@
   </div>
 </div>
 
+<!-- Reassign server -->
+<div class="overlay center" id="reassignOverlay">
+  <div class="confirm-box">
+    <p style="margin-bottom:12px;">Reassign to:</p>
+    <div class="server-pick-row" id="reassignPickRow" style="justify-content:center;"></div>
+    <button class="btn btn-outline" id="cancelReassign" style="width:100%; margin-top:10px;">Cancel</button>
+  </div>
+</div>
+
 <script>
 const STORAGE_KEY = 'kaneoTablesTracker_v2';
 const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
@@ -401,6 +413,24 @@ function load(){
 function save(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
 
 let state = load();
+
+function rolloverIfNewDay(){
+  const startedKey = dateKey(new Date(state.current.startedAt));
+  const todayKey = dateKey(new Date());
+  if(startedKey === todayKey) return;
+  if(state.current.servers.length>0 || state.current.tables.length>0){
+    if(!state.history[startedKey]) state.history[startedKey] = [];
+    state.history[startedKey].push({
+      startedAt: state.current.startedAt,
+      endedAt: Date.now(),
+      servers: state.current.servers,
+      tables: state.current.tables
+    });
+  }
+  state.current = emptyCurrent();
+  save();
+}
+rolloverIfNewDay();
 let pendingPeople = 2;
 let pendingServerId = null;
 let pendingResPeople = 2;
@@ -410,13 +440,18 @@ let selectedHistDate = null;
 // ---------- helpers ----------
 function countForServer(id, tables){ return (tables||state.current.tables).filter(t=>t.serverId===id).length; }
 function peopleForServer(id, tables){ return (tables||state.current.tables).filter(t=>t.serverId===id).reduce((s,t)=>s+t.people,0); }
+function reservationCountForServer(id){ return state.current.reservations.filter(r=>r.serverId===id).length; }
+function fairCount(id){ return countForServer(id) + reservationCountForServer(id); }
+
+const BARTENDER_HANDICAP = 2; // bartender needs to be this many tables behind before they're suggested
 
 function suggestServer(){
   const servers = state.current.servers;
   if(servers.length===0) return null;
   let min = Infinity, best = null;
   servers.forEach(s=>{
-    const c = countForServer(s.id);
+    let c = fairCount(s.id);
+    if(s.isBartender) c += BARTENDER_HANDICAP;
     if(c < min){ min = c; best = s; }
   });
   return best;
@@ -441,7 +476,7 @@ function renderServers(){
     const cnt = countForServer(s.id);
     chip.innerHTML = `
       <button class="bt-toggle" data-id="${s.id}" title="Mark bartender">🍸</button>
-      <span style="color:${c.dark};">${s.name}</span>
+      <span class="rename-server" data-id="${s.id}" style="color:${c.dark}; cursor:pointer;" title="Tap to rename">${s.name}</span>
       <span class="badge" style="background:${c.dark};">${cnt}</span>
       <button class="rm-server" data-id="${s.id}" title="Remove">✕</button>
     `;
@@ -454,10 +489,19 @@ function renderServers(){
       save(); renderAll();
     };
   });
+  list.querySelectorAll('.rename-server').forEach(btn=>{
+    btn.onclick = ()=>{
+      const s = state.current.servers.find(x=>x.id===btn.dataset.id);
+      const newName = prompt('Rename server:', s.name);
+      if(newName && newName.trim()){
+        s.name = newName.trim().slice(0,20);
+        save(); renderAll();
+      }
+    };
+  });
   list.querySelectorAll('.rm-server').forEach(btn=>{
     btn.onclick = ()=> openRemoveServer(btn.dataset.id);
   });
-  renderResServerSelect();
 }
 
 let removeServerTargetId = null;
@@ -490,7 +534,7 @@ function renderTableRows(container, tables, servers, opts){
     const row = document.createElement('div');
     row.className = 'table-row';
     row.innerHTML = `
-      <span class="table-server-tag" style="background:${c.pale}; color:${c.dark};">${server ? server.name : '—'}</span>
+      <span class="table-server-tag ${opts.editable?'reassign-tag':''}" data-id="${t.id}" style="background:${c.pale}; color:${c.dark}; ${opts.editable?'cursor:pointer;':''}">${server ? server.name : '—'}</span>
       <span class="source-tag ${t.source==='reservation' ? 'reservation' : ''}">${t.source==='reservation' ? 'Reservation' : 'Walk-in'}</span>
       <span class="table-time">${timeLabel(t.enteredAt)}</span>
       ${opts.editable ? `
@@ -507,6 +551,7 @@ function renderTableRows(container, tables, servers, opts){
     container.appendChild(row);
   });
   if(opts.editable){
+    container.querySelectorAll('.reassign-tag').forEach(b=> b.onclick=()=>openReassign('table', b.dataset.id));
     container.querySelectorAll('.pp-minus').forEach(b=> b.onclick=()=>changePeople(b.dataset.id,-1));
     container.querySelectorAll('.pp-plus').forEach(b=> b.onclick=()=>changePeople(b.dataset.id,1));
     container.querySelectorAll('.del-table').forEach(b=> b.onclick=()=>{
@@ -554,21 +599,43 @@ function renderSummary(){
 }
 
 // ---------- reservations ----------
-function renderResServerSelect(){
-  const sel = document.getElementById('resServerSelect');
-  const prev = sel.value;
-  sel.innerHTML = '';
-  if(state.current.servers.length===0){
-    sel.innerHTML = '<option value="">Add servers first</option>';
+let pendingResServerId = null;
+function renderResSuggestion(){
+  const boxWrap = document.getElementById('resSuggestBox');
+  const noteWrap = document.getElementById('resSuggestNote');
+  const pickRow = document.getElementById('resPickRow');
+  const suggestion = suggestServer();
+  if(!suggestion){
+    boxWrap.innerHTML = '<div class="empty-msg">Add servers to get a suggestion.</div>';
+    noteWrap.innerHTML = '';
+    pickRow.innerHTML = '';
     return;
   }
+  if(!pendingResServerId || !state.current.servers.some(s=>s.id===pendingResServerId)){
+    pendingResServerId = suggestion.id;
+  }
+  const sc = colorForServer(suggestion.id, state.current.servers);
+  boxWrap.innerHTML = `
+    <div class="suggest-box" style="background:${sc.pale};">
+      <span style="color:${sc.dark};">${suggestion.isBartender?'🍸':'👉'} Assign this reservation to</span>
+      <span class="who" style="color:${sc.dark};">${suggestion.name}</span>
+    </div>`;
+  noteWrap.innerHTML = suggestion.isBartender
+    ? `<div class="suggest-note">It's the bartender's turn — check if they're free that time. If not, pick someone else below.</div>`
+    : '';
+  pickRow.innerHTML = '';
   state.current.servers.forEach(s=>{
-    const opt = document.createElement('option');
-    opt.value = s.id;
-    opt.textContent = (s.isBartender?'🍸 ':'') + s.name;
-    sel.appendChild(opt);
+    const c = colorForServer(s.id, state.current.servers);
+    const selected = s.id===pendingResServerId;
+    const btn = document.createElement('button');
+    btn.className = 'server-pick';
+    btn.style.background = selected ? c.dark : c.pale;
+    btn.style.borderColor = c.dark;
+    btn.style.color = selected ? '#fff' : c.dark;
+    btn.textContent = (s.isBartender?'🍸 ':'') + s.name + ` (${fairCount(s.id)})`;
+    btn.onclick = ()=>{ pendingResServerId = s.id; renderResSuggestion(); };
+    pickRow.appendChild(btn);
   });
-  if(prev && state.current.servers.some(s=>s.id===prev)) sel.value = prev;
 }
 
 function renderReservations(){
@@ -591,7 +658,7 @@ function renderReservations(){
           <button class="res-pp-plus" data-id="${r.id}">+</button>
           <span class="party-label">guests</span>
         </div>
-        <div class="assigned">→ <span style="color:${c.dark}; font-weight:600;">${server ? (server.isBartender?'🍸 ':'')+server.name : 'unassigned'}</span></div>
+        <div class="assigned">→ <span class="reassign-tag" data-id="${r.id}" style="color:${c.dark}; font-weight:600; cursor:pointer;">${server ? (server.isBartender?'🍸 ':'')+server.name : 'unassigned'}</span></div>
         ${r.note ? `<div class="note">${r.note}</div>` : ''}
       </div>
       <div class="res-actions">
@@ -604,6 +671,7 @@ function renderReservations(){
   wrap.querySelectorAll('.res-pp-minus').forEach(b=> b.onclick=()=>changeResPeople(b.dataset.id,-1));
   wrap.querySelectorAll('.res-pp-plus').forEach(b=> b.onclick=()=>changeResPeople(b.dataset.id,1));
   wrap.querySelectorAll('.btn-seated').forEach(b=> b.onclick=()=>seatReservation(b.dataset.id));
+  wrap.querySelectorAll('.reassign-tag').forEach(b=> b.onclick=()=>openReassign('reservation', b.dataset.id));
   wrap.querySelectorAll('.del-res').forEach(b=> b.onclick=()=>{
     state.current.reservations = state.current.reservations.filter(r=>r.id!==b.dataset.id);
     save(); renderAll();
@@ -628,14 +696,18 @@ function seatReservation(id){
 document.getElementById('resMinus').onclick = ()=>{ pendingResPeople = Math.max(1,pendingResPeople-1); document.getElementById('resNum').textContent = pendingResPeople; };
 document.getElementById('resPlus').onclick = ()=>{ pendingResPeople = Math.min(30,pendingResPeople+1); document.getElementById('resNum').textContent = pendingResPeople; };
 document.getElementById('addResBtn').onclick = ()=>{
-  const sel = document.getElementById('resServerSelect');
-  if(!sel.value) return;
+  if(state.current.servers.length===0){
+    alert('Add servers to the shift first.');
+    return;
+  }
+  if(!pendingResServerId) return;
   const noteEl = document.getElementById('resNote');
   state.current.reservations.push({
-    id: uid(), people: pendingResPeople, serverId: sel.value, note: noteEl.value.trim()
+    id: uid(), people: pendingResPeople, serverId: pendingResServerId, note: noteEl.value.trim()
   });
   noteEl.value='';
   pendingResPeople = 2;
+  pendingResServerId = null;
   document.getElementById('resNum').textContent = 2;
   save(); renderAll();
 };
@@ -643,6 +715,7 @@ document.getElementById('addResBtn').onclick = ()=>{
 function renderAll(){
   renderServers();
   renderReservations();
+  renderResSuggestion();
   renderSummary();
   renderTables();
   renderWalkIn();
@@ -682,7 +755,7 @@ function renderWalkIn(){
     btn.style.background = selected ? c.dark : c.pale;
     btn.style.borderColor = c.dark;
     btn.style.color = selected ? '#fff' : c.dark;
-    btn.textContent = (s.isBartender?'🍸 ':'') + s.name + ` (${countForServer(s.id)})`;
+    btn.textContent = (s.isBartender?'🍸 ':'') + s.name + ` (${fairCount(s.id)})`;
     btn.onclick = ()=>{ pendingServerId = s.id; renderWalkIn(); };
     pickRow.appendChild(btn);
   });
@@ -714,6 +787,36 @@ document.getElementById('addServerBtn').onclick = ()=>{
 document.getElementById('newServerName').addEventListener('keydown', e=>{
   if(e.key==='Enter') document.getElementById('addServerBtn').click();
 });
+
+let reassignTarget = null;
+function openReassign(type, id){
+  reassignTarget = { type, id };
+  const pickRow = document.getElementById('reassignPickRow');
+  pickRow.innerHTML = '';
+  state.current.servers.forEach(s=>{
+    const c = colorForServer(s.id, state.current.servers);
+    const btn = document.createElement('button');
+    btn.className = 'server-pick';
+    btn.style.background = c.pale;
+    btn.style.borderColor = c.dark;
+    btn.style.color = c.dark;
+    btn.textContent = (s.isBartender?'🍸 ':'') + s.name;
+    btn.onclick = ()=>{
+      if(reassignTarget.type==='table'){
+        const t = state.current.tables.find(x=>x.id===reassignTarget.id);
+        if(t) t.serverId = s.id;
+      } else {
+        const r = state.current.reservations.find(x=>x.id===reassignTarget.id);
+        if(r) r.serverId = s.id;
+      }
+      save(); renderAll();
+      document.getElementById('reassignOverlay').classList.remove('show');
+    };
+    pickRow.appendChild(btn);
+  });
+  document.getElementById('reassignOverlay').classList.add('show');
+}
+document.getElementById('cancelReassign').onclick = ()=> document.getElementById('reassignOverlay').classList.remove('show');
 
 document.getElementById('cancelRemoveServer').onclick = ()=>{
   document.getElementById('removeServerOverlay').classList.remove('show');
